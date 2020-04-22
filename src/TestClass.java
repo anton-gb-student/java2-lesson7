@@ -30,8 +30,4 @@ public class TestClass {
         System.out.println("Test. Priority = 5");
     }
 
-    @AfterSuite
-    public void afterSuite () {
-        System.out.println("After Suite");
-    }
 }

@@ -2,10 +2,10 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class Main {
-    static List<Method> before = new ArrayList<>();
-    static List<Method> after = new ArrayList<>();
+    static List<Method> before = new ArrayList<>();                   // Для подсчета начальных
+    static List<Method> after = new ArrayList<>();                    // и конечных методов
     static ArrayList<Method> tests = new ArrayList<>();
-    static Comparator<Method> comparator = new Comparator<Method>() {
+    static Comparator<Method> comparator = new Comparator<Method>() { // Для сортировки по приоритету
         @Override
         public int compare(Method o1, Method o2) {
             return o1.getAnnotation(MyTest.class).priority() - o2.getAnnotation(MyTest.class).priority();
@@ -21,17 +21,17 @@ public class Main {
                 after.add(m);
             } else if (m.isAnnotationPresent(MyTest.class)) {
                 tests.add(m);
-                Collections.sort(tests, comparator);
             }
+            tests.sort(comparator);
         }
         if (before.size()>1 || after.size()>1) {
             throw new RuntimeException ("Too many before's or after's");
         } else {
-            before.get(0).invoke(testObj);
+            if (!before.isEmpty()) before.get(0).invoke(testObj);
             for (Method m : tests) {
                 m.invoke(testObj);
             }
-            after.get(0).invoke(testObj);
+            if (!after.isEmpty()) after.get(0).invoke(testObj);
         }
     }
 
